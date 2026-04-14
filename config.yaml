@@ -1,0 +1,43 @@
+# Google Drive Structured Sync Agent — Configuration
+# Paths support ~ expansion.
+# Edit this file to change vault destinations, poll interval, or add new rules.
+
+vault_root: ~/vault/
+queue_dir: ~/.config/gdrive-sync/queue/
+processed_dir: ~/.config/gdrive-sync/processed/
+flagged_dir: ~/.config/gdrive-sync/flagged/
+log_file: ~/.config/gdrive-sync/sync.log
+poll_interval_seconds: 30
+
+# Classification rules — evaluated top to bottom, first match wins.
+# Optional field: filename_contains (case-insensitive substring match on the stem).
+# Confidence for matched rules is 0.9; fallback (no match) is 0.3 -> Needs Review/.
+classification_rules:
+
+  # Audio and video recordings -> Meeting Notes
+  - extensions: [.mp3, .mp4, .wav, .ogg, .m4a]
+    destination: "Meeting Notes/"
+    category: recording
+
+  # Presentation decks
+  - extensions: [.pptx, .ppt, .key]
+    destination: "Presentations/"
+    category: deck
+
+  # PDF + "contract" in filename -> Legal
+  - extensions: [.pdf]
+    filename_contains: contract
+    destination: "Legal/"
+    category: contract
+
+  # PDF + "invoice" in filename -> Finance
+  - extensions: [.pdf]
+    filename_contains: invoice
+    destination: "Finance/"
+    category: invoice
+
+  # Add more rules as needed:
+  # - extensions: [.pdf]
+  #   filename_contains: proposal
+  #   destination: "Sales/"
+  #   category: proposal
